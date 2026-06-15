@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param,Patch, Post } from '@nestjs/common';
 import { EnrollmentService } from './enrollment.service';
 
 @Controller('enrollment')
@@ -14,4 +14,21 @@ getStudentEnrollments(@Param('studentId') studentId: string) {
   createEnrollment(@Body() enrollmentDto: any) {
     return this.enrollmentService.createEnrollment(enrollmentDto);
   }
+
+  @Patch('progress/:id')
+updateProgress(
+  @Param('id') id: string,
+  @Body() body: { videosWatched: number },
+) {
+  return this.enrollmentService.updateProgress(
+    id,
+    body.videosWatched,
+  );
+}
+
+@Patch('complete/:id')
+markCompleted(@Param('id') id: string) {
+  return this.enrollmentService.markCompleted(id);
+}
+
 }

@@ -25,4 +25,29 @@ export class EnrollmentService {
   });
 }
 
+async updateProgress(
+  enrollmentId: string,
+  videosWatched: number,
+) {
+  return await this.prisma.enrollment.update({
+    where: {
+      id: enrollmentId,
+    },
+    data: {
+      videosWatched,
+    },
+  });
+}
+
+async markCompleted(enrollmentId: string) {
+  return await this.prisma.enrollment.update({
+    where: {
+      id: enrollmentId,
+    },
+    data: {
+      completed: true,
+    },
+  });
+}
+
 }
