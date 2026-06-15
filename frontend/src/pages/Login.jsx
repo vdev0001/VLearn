@@ -1,7 +1,11 @@
 import { useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 function Login() {
+
+  const navigate = useNavigate();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -18,6 +22,9 @@ function Login() {
     );
 
     localStorage.setItem("token", response.data.accessToken);
+    localStorage.setItem("userId", response.data.user.id);
+    localStorage.setItem("role", response.data.user.role);
+    navigate("/student");
 
     console.log(response.data);
     console.log("Token saved successfully!");
