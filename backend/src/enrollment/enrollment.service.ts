@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
@@ -13,7 +13,18 @@ export class EnrollmentService {
   });
 }
 
-  async createEnrollment(enrollmentDto: any) {
+async createEnrollment(enrollmentDto: any) {
+  const existingEnrollment = await this.prisma.enrollment.findFirst({
+    where: {
+      studentId: enrollmentDto.studentId,
+      courseId: enrollmentDto.courseId,
+    },
+  });
+
+  if (existingEnrollment) {
+    throw new BadRequestException("Student is already enrolled in this course");
+  }
+
   return await this.prisma.enrollment.create({
     data: {
       studentId: enrollmentDto.studentId,
