@@ -5,6 +5,14 @@ import { PrismaService } from '../prisma/prisma.service';
 export class EnrollmentService {
   constructor(private prisma: PrismaService) {}
 
+  async getStudentEnrollments(studentId: string) {
+  return await this.prisma.enrollment.findMany({
+    where: {
+      studentId,
+    },
+  });
+}
+
   async createEnrollment(enrollmentDto: any) {
   return await this.prisma.enrollment.create({
     data: {
