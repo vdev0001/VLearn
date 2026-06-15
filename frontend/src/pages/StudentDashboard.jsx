@@ -5,14 +5,14 @@ function StudentDashboard() {
   const [courses, setCourses] = useState([]);
   const [enrollments, setEnrollments] = useState([]);
 
+  const token = localStorage.getItem("token");
   const userId = localStorage.getItem("userId");
 
   useEffect(() => {
-    const fetchCourses = async () => {
+    const fetchData = async () => {
       try {
-        const token = localStorage.getItem("token");
-
-        const response = await axios.get(
+        // Fetch courses
+        const courseResponse = await axios.get(
           "http://localhost:3000/course",
           {
             headers: {
@@ -21,80 +21,74 @@ function StudentDashboard() {
           }
         );
 
-        setCourses(response.data);
+        setCourses(courseResponse.data);
 
+        // Fetch current student's enrollments
         const enrollmentResponse = await axios.get(
-  "http://localhost:3000/enrollment/student/5210519c-3fe7-42ad-9604-ff76646c95ff",
-  {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  }
-);
+          `http://localhost:3000/enrollment/student/${userId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
 
-setEnrollments(enrollmentResponse.data);
-
+        setEnrollments(enrollmentResponse.data);
       } catch (error) {
         console.error(error);
       }
     };
 
-    fetchCourses();
-  }, []);
+    fetchData();
+  }, [token, userId]);
 
-
-const isEnrolled = (courseId) => {
-  return enrollments.some(
-    (enrollment) => enrollment.courseId === courseId
-  );
-};
-
-const handleEnroll = async (courseId) => {
-  try {
-    const token = localStorage.getItem("token");
-
-    const userId = localStorage.getItem("userId");
-
-    await axios.post(
-      "http://localhost:3000/enrollment/create",
-      {
-        studentId:userId,
-        instructorId: "cf43e1c0-f4aa-42bc-9784-d30096375c29",
-        courseId: courseId,
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
+  const isEnrolled = (courseId) => {
+    return enrollments.some(
+      (enrollment) => enrollment.courseId === courseId
     );
+  };
 
-    alert("Enrolled successfully!");
+  const handleEnroll = async (courseId) => {
+    try {
+      await axios.post(
+        "http://localhost:3000/enrollment/create",
+        {
+          studentId: userId,
+          instructorId: "cf43e1c0-f4aa-42bc-9784-d30096375c29", // Temporary
+          courseId,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
-    window.location.reload();
+      alert("Enrolled successfully!");
 
-     const enrollmentResponse = await axios.get(`http://localhost:3000/enrollment/student/${userId}`,
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+      // Refresh enrollments
+      const enrollmentResponse = await axios.get(
+        `http://localhost:3000/enrollment/student/${userId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      setEnrollments(enrollmentResponse.data);
+    } catch (error) {
+      console.error(error);
+
+      if (error.response?.data?.message) {
+        alert(error.response.data.message);
+      } else {
+        alert("Enrollment failed!");
+      }
     }
-  );
-    
-  setEnrollments(enrollmentResponse.data);
-  }
-  catch (error) {
-  console.error(error);
+  };
 
-  if (error.response?.data?.message) {
-    alert(error.response.data.message);
-  } else {
-    alert("Enrollment failed!");
-  }
-}
-};
-
-return (
+  return (
     <div>
       <h1>Student Dashboard</h1>
 
@@ -104,11 +98,14 @@ return (
         <div key={course.id}>
           <h3>{course.title}</h3>
           <p>{course.description}</p>
-          
+
           {isEnrolled(course.id) ? (
-  <button disabled>Already Enrolled ✅</button>
-) : (
-       <button  onClick={() => handleEnroll(course.id)}>Enroll</button>)}
+            <button disabled>Already Enrolled ✅</button>
+          ) : (
+            <button onClick={() => handleEnroll(course.id)}>
+              Enroll
+            </button>
+          )}
 
           <hr />
         </div>
