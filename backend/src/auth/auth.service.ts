@@ -2,10 +2,11 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import * as bcrypt from 'bcrypt';
 import { RegisterDto } from './dto/register.dto';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
- constructor(private prisma: PrismaService) {}
+ constructor(private prisma: PrismaService,private jwtService: JwtService,) {}
 
 
 async registerStudent(registerDto: RegisterDto) {
@@ -69,9 +70,15 @@ async login(loginDto: any) {
     };
   }
 
-  return {
-    message: 'Login successful',
-    user,
-  };
+  const token = this.jwtService.sign({
+  userId: user.id,
+  email: user.email,
+  role: user.role,
+});
+
+return {
+  message: 'Login successful',
+  accessToken: token,
+};
 }
 }
