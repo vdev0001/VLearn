@@ -12,6 +12,15 @@ export class CourseService {
       description: courseDto.description,
       youtubePlaylistUrl: courseDto.youtubePlaylistUrl,
       totalVideos: courseDto.totalVideos,
+      instructorId: courseDto.instructorId
+    },
+  });
+}
+
+async getInstructorCourses(instructorId: string) {
+  return await this.prisma.course.findMany({
+    where: {
+      instructorId,
     },
   });
 }

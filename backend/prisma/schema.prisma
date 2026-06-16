@@ -39,6 +39,8 @@ model Course {
   youtubePlaylistUrl String
   totalVideos        Int
 
+  instructorId       String
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
