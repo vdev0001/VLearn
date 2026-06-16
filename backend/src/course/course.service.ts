@@ -29,4 +29,27 @@ async getAllCourses() {
   return await this.prisma.course.findMany();
 }
 
+
+async deleteCourse(id: string) {
+  return await this.prisma.course.delete({
+    where: {
+      id,
+    },
+  });
+}
+
+async updateCourse(id: string, courseDto: any) {
+  return await this.prisma.course.update({
+    where: {
+      id,
+    },
+    data: {
+      title: courseDto.title,
+      description: courseDto.description,
+      youtubePlaylistUrl: courseDto.youtubePlaylistUrl,
+      totalVideos: courseDto.totalVideos,
+    },
+  });
+}
+
 }
