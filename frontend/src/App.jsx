@@ -1,22 +1,24 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-// Auth
+// ===================== AUTH =====================
 import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
 
-// Student
+// ===================== STUDENT =====================
 import Dashboard from "./pages/student/Dashboard";
-import MyCourses from "./pages/student/MyCourses";
-import Profile from "./pages/student/Profile";
-import Chat from "./pages/student/Chat";
 import ContinueLearning from "./pages/student/ContinueLearning";
+import MyCourses from "./pages/student/MyCourses";
+import Chat from "./pages/student/Chat";
+import Profile from "./pages/student/Profile";
 
-// Instructor
+// ===================== INSTRUCTOR =====================
 import InstructorDashboard from "./pages/instructor/Dashboard";
 import CreateCourse from "./pages/instructor/CreateCourse";
 import ManageCourses from "./pages/instructor/ManageCourses";
+import InstructorChat from "./pages/instructor/Chat";
+import InstructorProfile from "./pages/instructor/Profile";
 
-// Admin
+// ===================== ADMIN =====================
 import AdminDashboard from "./pages/admin/Dashboard";
 import Users from "./pages/admin/Users";
 import Courses from "./pages/admin/Courses";
@@ -27,22 +29,34 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* Authentication */}
+        {/* ===================== AUTH ===================== */}
         <Route path="/" element={<Login />} />
         <Route path="/register" element={<Register />} />
 
-        {/* Student */}
+        {/* ===================== STUDENT ===================== */}
         <Route path="/student" element={<Dashboard />} />
-        <Route path="/student/my-courses" element={<MyCourses />} />
-        <Route path="/student/profile" element={<Profile />} />
-        <Route path="/student/chat" element={<Chat />} />
         <Route
           path="/student/continue-learning"
           element={<ContinueLearning />}
         />
+        <Route
+          path="/student/my-courses"
+          element={<MyCourses />}
+        />
+        <Route
+          path="/student/chat"
+          element={<Chat />}
+        />
+        <Route
+          path="/student/profile"
+          element={<Profile />}
+        />
 
-        {/* Instructor */}
-        <Route path="/instructor" element={<InstructorDashboard />} />
+        {/* ===================== INSTRUCTOR ===================== */}
+        <Route
+          path="/instructor"
+          element={<InstructorDashboard />}
+        />
         <Route
           path="/instructor/create"
           element={<CreateCourse />}
@@ -51,11 +65,28 @@ function App() {
           path="/instructor/courses"
           element={<ManageCourses />}
         />
+        <Route
+          path="/instructor/chat"
+          element={<InstructorChat />}
+        />
+        <Route
+          path="/instructor/profile"
+          element={<InstructorProfile />}
+        />
 
-        {/* Admin */}
-        <Route path="/admin" element={<AdminDashboard />} />
-        <Route path="/admin/users" element={<Users />} />
-        <Route path="/admin/courses" element={<Courses />} />
+        {/* ===================== ADMIN ===================== */}
+        <Route
+          path="/admin"
+          element={<AdminDashboard />}
+        />
+        <Route
+          path="/admin/users"
+          element={<Users />}
+        />
+        <Route
+          path="/admin/courses"
+          element={<Courses />}
+        />
         <Route
           path="/admin/analytics"
           element={<Analytics />}

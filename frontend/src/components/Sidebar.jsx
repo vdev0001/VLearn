@@ -4,19 +4,19 @@ import {
   ChevronLeft,
   LayoutDashboard,
   BookOpen,
-  Search,
   PlusCircle,
   User,
   LogOut,
   Users,
   BarChart3,
   Settings,
+  MessageSquare,
+  PlayCircle,
 } from "lucide-react";
 import "./Sidebar.css";
 
-function Sidebar({ role, collapsed, setCollapsed  }) {
-
-  // Temporary values (we'll replace with real user data later)
+function Sidebar({ role, collapsed, setCollapsed }) {
+  // Temporary values (replace with API/user context later)
   const username = localStorage.getItem("username") || "VLearn User";
   const email = localStorage.getItem("email") || "user@vlearn.com";
 
@@ -37,22 +37,27 @@ function Sidebar({ role, collapsed, setCollapsed  }) {
       {/* Navigation */}
       <nav className="sidebar-nav">
 
+        {/* ===================== STUDENT ===================== */}
         {role === "student" && (
           <>
+            <Link to="/student">
+              <LayoutDashboard size={20} />
+              {!collapsed && <span>Dashboard</span>}
+            </Link>
 
-          <Link to="/student">
-  <LayoutDashboard size={20} />
-  {!collapsed && <span>Dashboard</span>}
-</Link>
-          
+            <Link to="/student/continue-learning">
+              <PlayCircle size={20} />
+              {!collapsed && <span>Continue Learning</span>}
+            </Link>
+
             <Link to="/student/my-courses">
               <BookOpen size={20} />
               {!collapsed && <span>My Courses</span>}
             </Link>
 
-            <Link to="/student">
-              <Search size={20} />
-              {!collapsed && <span>Browse Courses</span>}
+            <Link to="/student/chat">
+              <MessageSquare size={20} />
+              {!collapsed && <span>Chat</span>}
             </Link>
 
             <Link to="/student/profile">
@@ -62,62 +67,69 @@ function Sidebar({ role, collapsed, setCollapsed  }) {
           </>
         )}
 
+        {/* ===================== INSTRUCTOR ===================== */}
         {role === "instructor" && (
-  <>
-    <Link to="/instructor">
-      <LayoutDashboard size={20} />
-      {!collapsed && <span>Dashboard</span>}
-    </Link>
+          <>
+            <Link to="/instructor">
+              <LayoutDashboard size={20} />
+              {!collapsed && <span>Dashboard</span>}
+            </Link>
 
-    <Link to="/instructor/create">
-      <PlusCircle size={20} />
-      {!collapsed && <span>Create Course</span>}
-    </Link>
+            <Link to="/instructor/create">
+              <PlusCircle size={20} />
+              {!collapsed && <span>Create Course</span>}
+            </Link>
 
-    <Link to="/instructor/courses">
-      <BookOpen size={20} />
-      {!collapsed && <span>Manage Courses</span>}
-    </Link>
+            <Link to="/instructor/courses">
+              <BookOpen size={20} />
+              {!collapsed && <span>Manage Courses</span>}
+            </Link>
 
-    <Link to="/instructor/profile">
-      <User size={20} />
-      {!collapsed && <span>Profile</span>}
-    </Link>
-  </>
-)}
+            <Link to="/instructor/chat">
+              <MessageSquare size={20} />
+              {!collapsed && <span>Chat</span>}
+            </Link>
 
+            <Link to="/instructor/profile">
+              <User size={20} />
+              {!collapsed && <span>Profile</span>}
+            </Link>
+          </>
+        )}
+
+        {/* ===================== ADMIN ===================== */}
         {role === "admin" && (
-  <>
-    <Link to="/admin">
-      <LayoutDashboard size={20} />
-      {!collapsed && <span>Dashboard</span>}
-    </Link>
+          <>
+            <Link to="/admin">
+              <LayoutDashboard size={20} />
+              {!collapsed && <span>Dashboard</span>}
+            </Link>
 
-    <Link to="/admin/users">
-      <Users size={20} />
-      {!collapsed && <span>Manage Users</span>}
-    </Link>
+            <Link to="/admin/users">
+              <Users size={20} />
+              {!collapsed && <span>Manage Users</span>}
+            </Link>
 
-    <Link to="/admin/courses">
-      <BookOpen size={20} />
-      {!collapsed && <span>Manage Courses</span>}
-    </Link>
+            <Link to="/admin/courses">
+              <BookOpen size={20} />
+              {!collapsed && <span>Manage Courses</span>}
+            </Link>
 
-    <Link to="/admin/analytics">
-      <BarChart3 size={20} />
-      {!collapsed && <span>Analytics</span>}
-    </Link>
+            <Link to="/admin/analytics">
+              <BarChart3 size={20} />
+              {!collapsed && <span>Analytics</span>}
+            </Link>
 
-    <Link to="/admin/settings">
-      <Settings size={20} />
-      {!collapsed && <span>Settings</span>}
-    </Link>
-  </>
-)}
+            <Link to="/admin/settings">
+              <Settings size={20} />
+              {!collapsed && <span>Settings</span>}
+            </Link>
+          </>
+        )}
 
       </nav>
 
-      {/* Bottom Section */}
+      {/* Bottom */}
       <div className="sidebar-bottom">
         {!collapsed && (
           <div className="user-card">
@@ -132,21 +144,21 @@ function Sidebar({ role, collapsed, setCollapsed  }) {
           </div>
         )}
 
-       <button
-  className="logout-link"
-  onClick={() => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("userId");
-    localStorage.removeItem("role");
-    localStorage.removeItem("username");
-    localStorage.removeItem("email");
+        <button
+          className="logout-link"
+          onClick={() => {
+            localStorage.removeItem("token");
+            localStorage.removeItem("userId");
+            localStorage.removeItem("role");
+            localStorage.removeItem("username");
+            localStorage.removeItem("email");
 
-    window.location.href = "/";
-  }}
->
-  <LogOut size={20} />
-  {!collapsed && <span>Logout</span>}
-</button>
+            window.location.href = "/";
+          }}
+        >
+          <LogOut size={20} />
+          {!collapsed && <span>Logout</span>}
+        </button>
       </div>
     </aside>
   );
