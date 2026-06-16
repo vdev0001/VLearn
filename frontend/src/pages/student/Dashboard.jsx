@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { toast } from "react-toastify";
+import "../StudentDashboard.css";
+import DashboardLayout from "../../components/DashboardLayout";
 
-function StudentDashboard() {
+function Dashboard() {
   const [courses, setCourses] = useState([]);
   const [enrollments, setEnrollments] = useState([]);
 
@@ -48,13 +51,13 @@ function StudentDashboard() {
     );
   };
 
-  const handleEnroll = async (courseId) => {
+  const handleEnroll = async (courseId, instructorId) => {
     try {
       await axios.post(
         "http://localhost:3000/enrollment/create",
         {
           studentId: userId,
-          instructorId: "cf43e1c0-f4aa-42bc-9784-d30096375c29", // Temporary
+          instructorId, // Temporary
           courseId,
         },
         {
@@ -64,7 +67,7 @@ function StudentDashboard() {
         }
       );
 
-      alert("Enrolled successfully!");
+      toast.success("Enrolled successfully! 🎉");
 
       // Refresh enrollments
       const enrollmentResponse = await axios.get(
@@ -81,37 +84,48 @@ function StudentDashboard() {
       console.error(error);
 
       if (error.response?.data?.message) {
-        alert(error.response.data.message);
+        toast.error(error.response.data.message);
       } else {
-        alert("Enrollment failed!");
+        toast.error("Enrollment failed!");
       }
     }
   };
 
   return (
-    <div>
+  <DashboardLayout role="student">
+    <div className="dashboard">
       <h1>Student Dashboard</h1>
 
       <h2>Available Courses</h2>
 
-      {courses.map((course) => (
-        <div key={course.id}>
-          <h3>{course.title}</h3>
-          <p>{course.description}</p>
+      {courses.length === 0 ? (
+        <p>No courses available.</p>
+      ) : (
+        courses.map((course) => (
+          <div className="course-card" key={course.id}>
+            <h3>{course.title}</h3>
+            <p>{course.description}</p>
 
-          {isEnrolled(course.id) ? (
-            <button disabled>Already Enrolled ✅</button>
-          ) : (
-            <button onClick={() => handleEnroll(course.id)}>
-              Enroll
-            </button>
-          )}
-
-          <hr />
-        </div>
-      ))}
+            {isEnrolled(course.id) ? (
+              <button className="enrolled-btn" disabled>
+                Already Enrolled ✅
+              </button>
+            ) : (
+              <button
+                className="enroll-btn"
+                onClick={() =>
+                  handleEnroll(course.id, course.instructorId)
+                }
+              >
+                Enroll
+              </button>
+            )}
+          </div>
+        ))
+      )}
     </div>
-  );
+  </DashboardLayout>
+);
 }
 
-export default StudentDashboard;
+export default Dashboard;

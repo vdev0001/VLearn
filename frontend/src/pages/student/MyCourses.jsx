@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { toast } from "react-toastify";
+import DashboardLayout from "../../components/DashboardLayout";
 
 function MyCourses() {
   const [enrollments, setEnrollments] = useState([]);
@@ -63,7 +65,7 @@ const handleUpdateProgress = async (enrollmentId, currentVideos) => {
       }
     );
 
-    alert("Progress updated!");
+    toast.success("Progress updated!");
 
     // Update the UI without reloading
     setEnrollments((prev) =>
@@ -77,7 +79,7 @@ const handleUpdateProgress = async (enrollmentId, currentVideos) => {
   console.error(error);
   console.log(error.response?.data);
   console.log(error.response?.status);
-  alert("Failed to update progress");
+  toast.error("Failed to update progress");
 }
 };
 
@@ -93,7 +95,7 @@ const handleMarkCompleted = async (enrollmentId) => {
       }
     );
 
-    alert("Course marked as completed!");
+    toast.success("Course marked as completed! ✅");
 
     setEnrollments((prev) =>
       prev.map((enrollment) =>
@@ -104,11 +106,12 @@ const handleMarkCompleted = async (enrollmentId) => {
     );
   } catch (error) {
     console.error(error);
-    alert("Failed to mark as completed");
+    toast.error("Failed to mark as completed");
   }
 };
 
   return (
+    <DashboardLayout role="student">
     <div>
       <h1>My Courses</h1>
 
@@ -135,11 +138,11 @@ const handleMarkCompleted = async (enrollmentId) => {
 
             <button onClick={() => handleMarkCompleted(enrollment.id)}>Mark as Completed</button>
 
-            <hr />
           </div>
         ))
       )}
     </div>
+    </DashboardLayout>
   );
 }
 

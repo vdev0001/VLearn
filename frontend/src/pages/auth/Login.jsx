@@ -25,6 +25,16 @@ function Login() {
     localStorage.setItem("userId", response.data.user.id);
     localStorage.setItem("role", response.data.user.role);
 
+    localStorage.setItem(
+  "username",
+  response.data.user.username || response.data.user.name || "User"
+);
+
+localStorage.setItem(
+  "email",
+  response.data.user.email
+);
+
     if (response.data.user.role === "INSTRUCTOR") {
       navigate("/instructor");
     } else if (response.data.user.role === "STUDENT") {
@@ -34,6 +44,7 @@ function Login() {
     }
 
     console.log(response.data);
+    console.log(response.data.user);
     console.log("Token saved successfully!");
   } catch (error) {
     console.error(error);

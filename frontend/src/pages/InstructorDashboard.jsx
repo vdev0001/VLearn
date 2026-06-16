@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
-import "./InstructorDashboard.css";
+import "../InstructorDashboard.css";
 import { PlusCircle, Trash2 } from "lucide-react";
-import vlearnLogo from "../assets/vlearn-logo.png";
+import vlearnLogo from "../../assets/vlearn-logo.png";
+import DashboardLayout from "../../components/DashboardLayout";
 
 function InstructorDashboard() {
   const [courses, setCourses] = useState([]);
@@ -156,6 +157,7 @@ setTotalVideos("");
     Number(totalVideos) > 0;
 
 return (
+  <DashboardLayout role="instructor">
   <div className="dashboard">
     
 <div
@@ -170,7 +172,7 @@ return (
     src={vlearnLogo}
     alt="VLearn Logo"
     style={{
-      width: "100x",
+      width: "100px",
       height: "100px",
       objectFit: "contain",
       borderRadius: "12px",
@@ -293,6 +295,7 @@ return (
       ))
     )}
   </div>
+  </DashboardLayout>
 );
 }
 
