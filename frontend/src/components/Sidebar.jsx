@@ -45,7 +45,7 @@ function Sidebar({ role, collapsed, setCollapsed  }) {
   {!collapsed && <span>Dashboard</span>}
 </Link>
           
-            <Link to="/my-courses">
+            <Link to="/student/my-courses">
               <BookOpen size={20} />
               {!collapsed && <span>My Courses</span>}
             </Link>
@@ -55,7 +55,7 @@ function Sidebar({ role, collapsed, setCollapsed  }) {
               {!collapsed && <span>Browse Courses</span>}
             </Link>
 
-            <Link to="/profile">
+            <Link to="/student/profile">
               <User size={20} />
               {!collapsed && <span>Profile</span>}
             </Link>
@@ -79,7 +79,7 @@ function Sidebar({ role, collapsed, setCollapsed  }) {
       {!collapsed && <span>Manage Courses</span>}
     </Link>
 
-    <Link to="/profile">
+    <Link to="/instructor/profile">
       <User size={20} />
       {!collapsed && <span>Profile</span>}
     </Link>

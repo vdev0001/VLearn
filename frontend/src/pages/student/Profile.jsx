@@ -1,19 +1,15 @@
 import DashboardLayout from "../../components/DashboardLayout";
 
 function Profile() {
-  const username = localStorage.getItem("username") || "User";
-  const email = localStorage.getItem("email") || "user@example.com";
-  const role = localStorage.getItem("role") || "Unknown";
-
   return (
-    <DashboardLayout role={role.toLowerCase()}>
+    <DashboardLayout role="student">
       <div className="dashboard">
-        <h1 style={{ color: "#04AA6D" }}>My Profile</h1>
+        <h1>My Profile</h1>
 
         <div className="course-card">
-          <h3>{username}</h3>
-          <p>Email: {email}</p>
-          <p>Role: {role}</p>
+          <p><strong>Username:</strong> {localStorage.getItem("username")}</p>
+          <p><strong>Email:</strong> {localStorage.getItem("email")}</p>
+          <p><strong>Role:</strong> {localStorage.getItem("role")}</p>
         </div>
       </div>
     </DashboardLayout>
