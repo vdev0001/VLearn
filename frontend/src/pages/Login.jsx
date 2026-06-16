@@ -9,7 +9,7 @@ function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleLogin = async (e) => {
+ const handleLogin = async (e) => {
   e.preventDefault();
 
   try {
@@ -24,7 +24,14 @@ function Login() {
     localStorage.setItem("token", response.data.accessToken);
     localStorage.setItem("userId", response.data.user.id);
     localStorage.setItem("role", response.data.user.role);
-    navigate("/student");
+
+    if (response.data.user.role === "INSTRUCTOR") {
+      navigate("/instructor");
+    } else if (response.data.user.role === "STUDENT") {
+      navigate("/student");
+    } else {
+      navigate("/");
+    }
 
     console.log(response.data);
     console.log("Token saved successfully!");

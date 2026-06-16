@@ -1,0 +1,125 @@
+/* =========================
+   W3Schools Dark Theme
+========================= */
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #1d2a35;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Main Container */
+.dashboard {
+  max-width: 1000px;
+  margin: 40px auto;
+  padding: 20px;
+  color: #ffffff;
+}
+
+/* Headings */
+.dashboard h1 {
+  color: #04aa6d;
+  font-size: 42px;
+  margin-bottom: 25px;
+}
+
+.dashboard h2 {
+  color: #ffffff;
+  margin-bottom: 15px;
+}
+
+/* =========================
+   Create Course Section
+========================= */
+
+.create-course {
+  background: #38444d;
+  padding: 24px;
+  border-radius: 12px;
+  margin-bottom: 30px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.create-course input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px;
+  margin-bottom: 15px;
+  border-radius: 8px;
+  border: 1px solid #55636d;
+  background-color: #2b3a42;
+  color: white;
+  font-size: 15px;
+}
+
+.create-course input::placeholder {
+  color: #cbd5dc;
+}
+
+.create-course input:focus {
+  outline: none;
+  border-color: #04aa6d;
+  box-shadow: 0 0 5px rgba(4, 170, 109, 0.5);
+}
+
+/* GREEN CREATE BUTTON */
+.create-course button {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  background-color: #04aa6d;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.create-course button:hover {
+  background-color: #059862;
+}
+
+.create-course button:disabled {
+  background-color: #777;
+  cursor: not-allowed;
+}
+
+/* =========================
+   Course Cards
+========================= */
+
+.course-card {
+  background-color: #38444d;
+  padding: 20px;
+  border-radius: 12px;
+  margin-bottom: 18px;
+  border-left: 6px solid #04aa6d;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.25);
+}
+
+.course-card h3 {
+  margin-top: 0;
+  color: white;
+}
+
+.course-card p {
+  color: #d8e1e8;
+  margin: 8px 0;
+}
+
+/* RED DELETE BUTTON */
+.course-card button {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: 0.2s;
+}
+
+.course-card button:hover {
+  background-color: #bb2d3b;
+}
