@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
@@ -7,11 +7,18 @@ import { LoginDto } from './dto/login.dto';
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
+  @Get("users")
+getAllUsers() {
+  return this.authService.getAllUsers();
+}
+
 
   @Post('register/student')
   registerStudent(@Body() registerDto: RegisterDto) {
     return this.authService.registerStudent(registerDto);
   }
+
+  
 
   @Post('register/instructor')
   registerInstructor(@Body() registerDto: RegisterDto) {
@@ -26,6 +33,11 @@ registerAdmin(@Body() registerDto: RegisterDto) {
   @Post('login')
 login(@Body() loginDto: LoginDto) {
   return this.authService.login(loginDto);
+}
+
+@Delete("users/:id")
+deleteUser(@Param("id") id: string) {
+  return this.authService.deleteUser(id);
 }
 
 }

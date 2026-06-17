@@ -19,6 +19,11 @@ getInstructorEnrollments(
   );
 }
 
+@Get()
+getAllEnrollments() {
+  return this.enrollmentService.getAllEnrollments();
+}
+
   @Post('create')
   createEnrollment(@Body() enrollmentDto: any) {
     return this.enrollmentService.createEnrollment(enrollmentDto);

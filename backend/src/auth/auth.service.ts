@@ -4,6 +4,7 @@ import * as bcrypt from 'bcrypt';
 import { RegisterDto } from './dto/register.dto';
 import { JwtService } from '@nestjs/jwt';
 
+
 @Injectable()
 export class AuthService {
  constructor(private prisma: PrismaService,private jwtService: JwtService,) {}
@@ -19,10 +20,24 @@ async registerStudent(registerDto: RegisterDto) {
       role: 'STUDENT',
       status: 'PENDING',
     },
-  });
-
+  });  
   return user;
 }
+
+async getAllUsers() {
+  return this.prisma.user.findMany({
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      role: true,
+    },
+    orderBy: {
+      name: "asc",
+    },
+  });
+}
+
 
  async registerInstructor(registerDto: RegisterDto) {
   const hashedPassword = await bcrypt.hash(registerDto.password, 10);
@@ -104,5 +119,13 @@ return {
   },
 
 };
+}
+
+async deleteUser(id: string) {
+  return this.prisma.user.delete({
+    where: {
+      id,
+    },
+  });
 }
 }
