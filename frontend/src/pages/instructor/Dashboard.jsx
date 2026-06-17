@@ -36,7 +36,11 @@ function Dashboard() {
       ]);
 
       setTotalCourses(courseRes.data.length);
-      setTotalStudents(enrollmentRes.data.length);
+      const uniqueStudents = new Set(
+  enrollmentRes.data.map((enrollment) => enrollment.studentId)
+);
+
+setTotalStudents(uniqueStudents.size);
     } catch (error) {
       console.error(error);
     }
@@ -74,11 +78,6 @@ function Dashboard() {
             <p>Total Enrolled Students</p>
           </div>
 
-          <div className="course-card">
-            <PlusCircle size={32} color="#04AA6D" />
-            <h3>Create Courses</h3>
-            <p>Create and publish new learning content.</p>
-          </div>
         </div>
 
         <div

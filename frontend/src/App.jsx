@@ -25,7 +25,7 @@ import InstructorProfile from "./pages/instructor/Profile";
 import AdminDashboard from "./pages/admin/Dashboard";
 import Users from "./pages/admin/Users";
 import Courses from "./pages/admin/Courses";
-import Analytics from "./pages/admin/Analytics";
+// import Analytics from "./pages/admin/Analytics";//
 import Settings from "./pages/admin/Settings";
 
 function App() {
@@ -145,6 +145,8 @@ function App() {
             </ProtectedRoute>
           }
         />
+
+        {/*}
         <Route
           path="/admin/analytics"
           element={
@@ -153,6 +155,9 @@ function App() {
             </ProtectedRoute>
           }
         />
+        */}
+
+
         <Route
           path="/admin/settings"
           element={

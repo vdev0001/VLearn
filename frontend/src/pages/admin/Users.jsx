@@ -4,7 +4,6 @@ import DashboardLayout from "../../components/DashboardLayout";
 
 function Users() {
   const [users, setUsers] = useState([]);
-
   const token = localStorage.getItem("token");
 
   useEffect(() => {
@@ -13,18 +12,36 @@ function Users() {
 
   const fetchUsers = async () => {
     try {
-      const res = await axios.get(
-        "http://localhost:3000/user",
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const res = await axios.get("http://localhost:3000/auth/users", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
       setUsers(res.data);
     } catch (error) {
       console.error(error);
+    }
+  };
+
+  const deleteUser = async (id, name) => {
+    const confirmDelete = window.confirm(
+      `Are you sure you want to delete ${name}?`
+    );
+
+    if (!confirmDelete) return;
+
+    try {
+      await axios.delete(`http://localhost:3000/auth/users/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      fetchUsers();
+    } catch (error) {
+      console.error(error);
+      alert("Failed to delete user.");
     }
   };
 
@@ -44,24 +61,64 @@ function Users() {
           >
             <thead>
               <tr>
-                <th align="left">Name</th>
-                <th align="left">Email</th>
-                <th align="left">Role</th>
+                <th align="left" style={{ padding: "12px" }}>
+                  Name
+                </th>
+                <th align="left" style={{ padding: "12px" }}>
+                  Email
+                </th>
+                <th align="left" style={{ padding: "12px" }}>
+                  Role
+                </th>
+                <th align="left" style={{ padding: "12px" }}>
+                  Action
+                </th>
               </tr>
             </thead>
 
             <tbody>
-              {users.map((user) => (
+  {users
+    .filter((user) => user.role !== "ADMIN")
+    .map((user) => (
                 <tr key={user.id}>
-                  <td style={{ padding: "12px 0" }}>
-                    {user.username || user.name}
-                  </td>
-
+                  <td style={{ padding: "12px" }}>{user.name}</td>
                   <td>{user.email}</td>
-
                   <td>{user.role}</td>
+                  <td>
+                    {user.role !== "ADMIN" && (
+                      <button
+                        onClick={() =>
+                          deleteUser(user.id, user.name)
+                        }
+                        style={{
+                          background: "#dc2626",
+                          color: "white",
+                          border: "none",
+                          padding: "8px 14px",
+                          borderRadius: "6px",
+                          cursor: "pointer",
+                        }}
+                      >
+                        Delete
+                      </button>
+                    )}
+                  </td>
                 </tr>
               ))}
+
+              {users.length === 0 && (
+                <tr>
+                  <td
+                    colSpan="4"
+                    style={{
+                      textAlign: "center",
+                      padding: "20px",
+                    }}
+                  >
+                    No users found.
+                  </td>
+                </tr>
+              )}
             </tbody>
           </table>
         </div>

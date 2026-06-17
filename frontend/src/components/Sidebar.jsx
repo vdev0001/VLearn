@@ -54,10 +54,6 @@ function Sidebar({ role, collapsed, setCollapsed }) {
               {!collapsed && <span>My Courses</span>}
             </Link>
 
-            <Link to="/student/profile">
-              <User size={20} />
-              {!collapsed && <span>Profile</span>}
-            </Link>
           </>
         )}
 
@@ -79,10 +75,6 @@ function Sidebar({ role, collapsed, setCollapsed }) {
               {!collapsed && <span>Manage Courses</span>}
             </Link>
 
-            <Link to="/instructor/profile">
-              <User size={20} />
-              {!collapsed && <span>Profile</span>}
-            </Link>
           </>
         )}
 
@@ -103,16 +95,6 @@ function Sidebar({ role, collapsed, setCollapsed }) {
               <BookOpen size={20} />
               {!collapsed && <span>Manage Courses</span>}
             </Link>
-
-            <Link to="/admin/analytics">
-              <BarChart3 size={20} />
-              {!collapsed && <span>Analytics</span>}
-            </Link>
-
-            <Link to="/admin/settings">
-              <Settings size={20} />
-              {!collapsed && <span>Settings</span>}
-            </Link>
           </>
         )}
 
@@ -120,35 +102,47 @@ function Sidebar({ role, collapsed, setCollapsed }) {
 
       {/* Bottom */}
       <div className="sidebar-bottom">
-        {!collapsed && (
-          <div className="user-card">
-            <div className="avatar">
-              {username.charAt(0).toUpperCase()}
-            </div>
-
-            <div>
-              <div className="user-name">{username}</div>
-              <div className="user-email">{email}</div>
-            </div>
-          </div>
-        )}
-
-        <button
-          className="logout-link"
-          onClick={() => {
-            localStorage.removeItem("token");
-            localStorage.removeItem("userId");
-            localStorage.removeItem("role");
-            localStorage.removeItem("username");
-            localStorage.removeItem("email");
-
-            window.location.href = "/";
-          }}
-        >
-          <LogOut size={20} />
-          {!collapsed && <span>Logout</span>}
-        </button>
+  {!collapsed && (
+    <div
+      className="user-card"
+      style={{ cursor: "pointer" }}
+      onClick={() => {
+        if (role === "student") {
+          window.location.href = "/student/profile";
+        } else if (role === "instructor") {
+          window.location.href = "/instructor/profile";
+        } else if (role === "admin") {
+          window.location.href = "/admin/settings";
+        }
+      }}
+    >
+      <div className="avatar">
+        {username.charAt(0).toUpperCase()}
       </div>
+
+      <div>
+        <div className="user-name">{username}</div>
+        <div className="user-email">{email}</div>
+      </div>
+    </div>
+  )}
+
+  <button
+    className="logout-link"
+    onClick={() => {
+      localStorage.removeItem("token");
+      localStorage.removeItem("userId");
+      localStorage.removeItem("role");
+      localStorage.removeItem("username");
+      localStorage.removeItem("email");
+
+      window.location.href = "/";
+    }}
+  >
+    <LogOut size={20} />
+    {!collapsed && <span>Logout</span>}
+  </button>
+</div>
     </aside>
   );
 }
