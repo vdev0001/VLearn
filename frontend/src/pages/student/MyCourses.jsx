@@ -53,7 +53,14 @@ function MyCourses() {
       await axios.patch(
         `http://localhost:3000/enrollment/progress/${enrollmentId}`,
         {
-          videosWatched: currentVideos + 1,
+          videosWatched: Math.min(
+  currentVideos + 1,
+  courses.find(
+    (c) =>
+      c.id ===
+      enrollments.find((e) => e.id === enrollmentId)?.courseId
+  )?.totalVideos || currentVideos + 1
+),
         },
         {
           headers: {
@@ -124,6 +131,15 @@ function MyCourses() {
             // Ignore invalid/stale enrollments
             if (!course) return null;
 
+            const progress = course.totalVideos
+  ? Math.min(
+      Math.round(
+        (enrollment.videosWatched / course.totalVideos) * 100
+      ),
+      100
+    )
+  : 0;
+
             return (
               <div
                 key={enrollment.id}
@@ -135,15 +151,40 @@ function MyCourses() {
                 <p>{course.description}</p>
 
                 <p>
-                  <strong>Videos Watched:</strong>{" "}
-                  {enrollment.videosWatched}
-                </p>
+  <strong>Videos Watched:</strong>{" "}
+  {enrollment.videosWatched} / {course.totalVideos}
+</p>
+
+<p>
+  <strong>Progress:</strong> {progress}%
+</p>
+
+<div
+  style={{
+    width: "100%",
+    height: "10px",
+    backgroundColor: "#e5e7eb",
+    borderRadius: "999px",
+    overflow: "hidden",
+    marginTop: "8px",
+    marginBottom: "15px",
+  }}
+>
+  <div
+    style={{
+      width: `${progress}%`,
+      height: "100%",
+      backgroundColor: "#04AA6D",
+      transition: "width 0.3s ease",
+    }}
+  />
+</div>
 
                 <p>
                   <strong>Status:</strong>{" "}
                   {enrollment.completed
-                    ? "Completed ✅"
-                    : "In Progress"}
+                    ? `Completed ✅ (${progress}%)`
+                  : `In Progress (${progress}%)`}
                 </p>
 
                 <div
@@ -154,17 +195,21 @@ function MyCourses() {
                     flexWrap: "wrap",
                   }}
                 >
-                  <button
-                    className="enroll-btn"
-                    onClick={() =>
-                      handleUpdateProgress(
-                        enrollment.id,
-                        enrollment.videosWatched
-                      )
-                    }
-                  >
-                    Update Progress
-                  </button>
+                 <button
+  className="enroll-btn"
+  disabled={
+    enrollment.completed ||
+    enrollment.videosWatched >= course.totalVideos
+  }
+  onClick={() =>
+    handleUpdateProgress(
+      enrollment.id,
+      enrollment.videosWatched
+    )
+  }
+>
+  Update Progress
+</button>
 
                   {!enrollment.completed && (
                     <button
