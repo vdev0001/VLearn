@@ -10,6 +10,15 @@ getStudentEnrollments(@Param('studentId') studentId: string) {
   return this.enrollmentService.getStudentEnrollments(studentId);
 }
 
+@Get("instructor/:instructorId")
+getInstructorEnrollments(
+  @Param("instructorId") instructorId: string,
+) {
+  return this.enrollmentService.getInstructorEnrollments(
+    instructorId,
+  );
+}
+
   @Post('create')
   createEnrollment(@Body() enrollmentDto: any) {
     return this.enrollmentService.createEnrollment(enrollmentDto);

@@ -37,6 +37,23 @@ async registerStudent(registerDto: RegisterDto) {
     },
   });
 
+  
+  return user;
+}
+
+async registerAdmin(registerDto: RegisterDto) {
+  const hashedPassword = await bcrypt.hash(registerDto.password, 10);
+
+  const user = await this.prisma.user.create({
+    data: {
+      name: registerDto.name,
+      email: registerDto.email,
+      password: hashedPassword,
+      role: 'ADMIN',
+      status: 'APPROVED',
+    },
+  });
+
   return user;
 }
 

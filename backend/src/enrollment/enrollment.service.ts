@@ -13,6 +13,14 @@ export class EnrollmentService {
   });
 }
 
+async getInstructorEnrollments(instructorId: string) {
+  return await this.prisma.enrollment.findMany({
+    where: {
+      instructorId,
+    },
+  });
+}
+
 async createEnrollment(enrollmentDto: any) {
   const existingEnrollment = await this.prisma.enrollment.findFirst({
     where: {
