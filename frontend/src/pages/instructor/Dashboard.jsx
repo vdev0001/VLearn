@@ -1,134 +1,102 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
-import { toast } from "react-toastify";
-import { PlusCircle } from "lucide-react";
 import DashboardLayout from "../../components/DashboardLayout";
-import "../../pages/InstructorDashboard.css";
+import { BookOpen, Users, PlusCircle } from "lucide-react";
 
-function CreateCourse() {
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [youtubePlaylistUrl, setYoutubePlaylistUrl] = useState("");
-  const [totalVideos, setTotalVideos] = useState("");
+function Dashboard() {
+  const [totalCourses, setTotalCourses] = useState(0);
+  const [totalStudents, setTotalStudents] = useState(0);
 
   const token = localStorage.getItem("token");
   const userId = localStorage.getItem("userId");
 
-  const handleCreateCourse = async () => {
-    if (!title.trim()) {
-      toast.error("Please enter a course title.");
-      return;
-    }
+  useEffect(() => {
+    fetchDashboardData();
+  }, []);
 
-    if (!description.trim()) {
-      toast.error("Please enter a description.");
-      return;
-    }
-
-    if (!youtubePlaylistUrl.trim()) {
-      toast.error("Please enter a YouTube playlist URL.");
-      return;
-    }
-
-    if (!totalVideos || Number(totalVideos) <= 0) {
-      toast.error("Total Videos must be greater than 0.");
-      return;
-    }
-
+  const fetchDashboardData = async () => {
     try {
-      await axios.post(
-        "http://localhost:3000/course/create",
-        {
-          title: title.trim(),
-          description: description.trim(),
-          youtubePlaylistUrl: youtubePlaylistUrl.trim(),
-          totalVideos: Number(totalVideos),
-          instructorId: userId,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const [courseRes, enrollmentRes] = await Promise.all([
+        axios.get(
+          `http://localhost:3000/course/instructor/${userId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        ),
+        axios.get(
+          `http://localhost:3000/enrollment/instructor/${userId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        ),
+      ]);
 
-      toast.success("Course created successfully! 🎉");
-
-      setTitle("");
-      setDescription("");
-      setYoutubePlaylistUrl("");
-      setTotalVideos("");
+      setTotalCourses(courseRes.data.length);
+      setTotalStudents(enrollmentRes.data.length);
     } catch (error) {
       console.error(error);
-      toast.error("Failed to create course.");
     }
   };
-
-  const isFormValid =
-    title.trim() &&
-    description.trim() &&
-    youtubePlaylistUrl.trim() &&
-    Number(totalVideos) > 0;
 
   return (
     <DashboardLayout role="instructor">
       <div className="dashboard">
-        <div className="create-course">
-          <h1
-            style={{
-              color: "#04AA6D",
-              marginBottom: "20px",
-            }}
-          >
-            Create New Course
-          </h1>
+        <h1
+          style={{
+            color: "#04AA6D",
+            marginBottom: "20px",
+          }}
+        >
+          Instructor Dashboard
+        </h1>
 
-          <input
-            type="text"
-            placeholder="Course Title"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-          />
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns:
+              "repeat(auto-fit, minmax(220px, 1fr))",
+            gap: "20px",
+          }}
+        >
+          <div className="course-card">
+            <BookOpen size={32} color="#04AA6D" />
+            <h3>{totalCourses}</h3>
+            <p>Total Courses Created</p>
+          </div>
 
-          <input
-            type="text"
-            placeholder="Description"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-          />
+          <div className="course-card">
+            <Users size={32} color="#04AA6D" />
+            <h3>{totalStudents}</h3>
+            <p>Total Enrolled Students</p>
+          </div>
 
-          <input
-            type="text"
-            placeholder="YouTube Playlist URL"
-            value={youtubePlaylistUrl}
-            onChange={(e) => setYoutubePlaylistUrl(e.target.value)}
-          />
+          <div className="course-card">
+            <PlusCircle size={32} color="#04AA6D" />
+            <h3>Create Courses</h3>
+            <p>Create and publish new learning content.</p>
+          </div>
+        </div>
 
-          <input
-            type="number"
-            min="1"
-            placeholder="Total Videos"
-            value={totalVideos}
-            onChange={(e) => setTotalVideos(e.target.value)}
-          />
+        <div
+          className="course-card"
+          style={{ marginTop: "30px" }}
+        >
+          <h2>Welcome Instructor 👋</h2>
 
-          <button
-            onClick={handleCreateCourse}
-            disabled={!isFormValid}
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              gap: "8px",
-            }}
-          >
-            <PlusCircle size={18} />
-            Create Course
-          </button>
+          <p>
+            You have created <strong>{totalCourses}</strong>{" "}
+            course{totalCourses !== 1 ? "s" : ""} with{" "}
+            <strong>{totalStudents}</strong>{" "}
+            enrolled student{totalStudents !== 1 ? "s" : ""}.
+          </p>
         </div>
       </div>
     </DashboardLayout>
   );
 }
 
-export default CreateCourse;
+export default Dashboard;

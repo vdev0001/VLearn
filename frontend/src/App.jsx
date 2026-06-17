@@ -4,6 +4,9 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
 
+// ===================== PROTECTED ROUTE =====================
+import ProtectedRoute from "./components/ProtectedRoute";
+
 // ===================== STUDENT =====================
 import Dashboard from "./pages/student/Dashboard";
 import ContinueLearning from "./pages/student/ContinueLearning";
@@ -29,71 +32,134 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* ===================== AUTH ===================== */}
+        {/* AUTH */}
         <Route path="/" element={<Login />} />
         <Route path="/register" element={<Register />} />
 
-        {/* ===================== STUDENT ===================== */}
-        <Route path="/student" element={<Dashboard />} />
+        {/* STUDENT */}
+        <Route
+          path="/student"
+          element={
+            <ProtectedRoute allowedRole="STUDENT">
+              <Dashboard />
+            </ProtectedRoute>
+          }
+        />
         <Route
           path="/student/continue-learning"
-          element={<ContinueLearning />}
+          element={
+            <ProtectedRoute allowedRole="STUDENT">
+              <ContinueLearning />
+            </ProtectedRoute>
+          }
         />
         <Route
           path="/student/my-courses"
-          element={<MyCourses />}
+          element={
+            <ProtectedRoute allowedRole="STUDENT">
+              <MyCourses />
+            </ProtectedRoute>
+          }
         />
         <Route
           path="/student/chat"
-          element={<Chat />}
+          element={
+            <ProtectedRoute allowedRole="STUDENT">
+              <Chat />
+            </ProtectedRoute>
+          }
         />
         <Route
           path="/student/profile"
-          element={<Profile />}
+          element={
+            <ProtectedRoute allowedRole="STUDENT">
+              <Profile />
+            </ProtectedRoute>
+          }
         />
 
-        {/* ===================== INSTRUCTOR ===================== */}
+        {/* INSTRUCTOR */}
         <Route
           path="/instructor"
-          element={<InstructorDashboard />}
+          element={
+            <ProtectedRoute allowedRole="INSTRUCTOR">
+              <InstructorDashboard />
+            </ProtectedRoute>
+          }
         />
         <Route
           path="/instructor/create"
-          element={<CreateCourse />}
+          element={
+            <ProtectedRoute allowedRole="INSTRUCTOR">
+              <CreateCourse />
+            </ProtectedRoute>
+          }
         />
         <Route
           path="/instructor/courses"
-          element={<ManageCourses />}
+          element={
+            <ProtectedRoute allowedRole="INSTRUCTOR">
+              <ManageCourses />
+            </ProtectedRoute>
+          }
         />
         <Route
           path="/instructor/chat"
-          element={<InstructorChat />}
+          element={
+            <ProtectedRoute allowedRole="INSTRUCTOR">
+              <InstructorChat />
+            </ProtectedRoute>
+          }
         />
         <Route
           path="/instructor/profile"
-          element={<InstructorProfile />}
+          element={
+            <ProtectedRoute allowedRole="INSTRUCTOR">
+              <InstructorProfile />
+            </ProtectedRoute>
+          }
         />
 
-        {/* ===================== ADMIN ===================== */}
+        {/* ADMIN */}
         <Route
           path="/admin"
-          element={<AdminDashboard />}
+          element={
+            <ProtectedRoute allowedRole="ADMIN">
+              <AdminDashboard />
+            </ProtectedRoute>
+          }
         />
         <Route
           path="/admin/users"
-          element={<Users />}
+          element={
+            <ProtectedRoute allowedRole="ADMIN">
+              <Users />
+            </ProtectedRoute>
+          }
         />
         <Route
           path="/admin/courses"
-          element={<Courses />}
+          element={
+            <ProtectedRoute allowedRole="ADMIN">
+              <Courses />
+            </ProtectedRoute>
+          }
         />
         <Route
           path="/admin/analytics"
-          element={<Analytics />}
+          element={
+            <ProtectedRoute allowedRole="ADMIN">
+              <Analytics />
+            </ProtectedRoute>
+          }
         />
         <Route
           path="/admin/settings"
-          element={<Settings />}
+          element={
+            <ProtectedRoute allowedRole="ADMIN">
+              <Settings />
+            </ProtectedRoute>
+          }
         />
       </Routes>
     </BrowserRouter>

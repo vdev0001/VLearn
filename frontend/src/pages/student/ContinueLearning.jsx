@@ -1,21 +1,21 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { toast } from "react-toastify";
 import DashboardLayout from "../../components/DashboardLayout";
 
 function ContinueLearning() {
-  const [enrollments, setEnrollments] = useState([]);
-  const [courses, setCourses] = useState([]);
+  const [currentEnrollment, setCurrentEnrollment] = useState(null);
+  const [currentCourse, setCurrentCourse] = useState(null);
 
   const token = localStorage.getItem("token");
   const userId = localStorage.getItem("userId");
 
   useEffect(() => {
-    fetchData();
+    fetchCurrentCourse();
   }, []);
 
-  const fetchData = async () => {
+  const fetchCurrentCourse = async () => {
     try {
+      // Get all enrollments
       const enrollmentRes = await axios.get(
         `http://localhost:3000/enrollment/student/${userId}`,
         {
@@ -25,6 +25,20 @@ function ContinueLearning() {
         }
       );
 
+      // Find first incomplete enrollment
+      const activeEnrollment = enrollmentRes.data.find(
+        (e) => !e.completed
+      );
+
+      if (!activeEnrollment) {
+        setCurrentEnrollment(null);
+        setCurrentCourse(null);
+        return;
+      }
+
+      setCurrentEnrollment(activeEnrollment);
+
+      // Get all courses
       const courseRes = await axios.get(
         "http://localhost:3000/course",
         {
@@ -34,72 +48,99 @@ function ContinueLearning() {
         }
       );
 
-      setEnrollments(enrollmentRes.data);
-      setCourses(courseRes.data);
-    } catch (error) {
-      console.error(error);
-      toast.error("Failed to load enrolled courses");
+      const course = courseRes.data.find(
+        (c) =>
+          String(c.id) ===
+          String(activeEnrollment.courseId)
+      );
+
+      setCurrentCourse(course || null);
+    } catch (err) {
+      console.error(err);
     }
   };
 
-  const getCourse = (courseId) => {
-    return courses.find(
-      (course) => String(course.id) === String(courseId)
-    );
+  const handleContinue = () => {
+    if (currentCourse?.youtubePlaylistUrl) {
+      window.open(
+        currentCourse.youtubePlaylistUrl,
+        "_blank"
+      );
+    }
   };
 
-const handleContinue = (course) => {
-  if (course?.youtubePlaylistUrl) {
-    window.open(course.youtubePlaylistUrl, "_blank");
-  } else {
-    toast.info("Video link not available for this course.");
-  }
-};
+  const progress =
+    currentCourse && currentEnrollment
+      ? Math.min(
+          Math.round(
+            (currentEnrollment.videosWatched /
+              currentCourse.totalVideos) *
+              100
+          ),
+          100
+        )
+      : 0;
 
   return (
     <DashboardLayout role="student">
       <div className="dashboard">
-        <h1 style={{ color: "#04AA6D" }}>Continue Learning</h1>
+        <h1 style={{ color: "#04AA6D" }}>
+          Continue Learning
+        </h1>
 
-        {enrollments.length === 0 ? (
-          <p>You haven't enrolled in any courses yet.</p>
+        {!currentEnrollment || !currentCourse ? (
+          <div className="course-card">
+            <h3>No Active Course 🎉</h3>
+            <p>
+              You have completed all your current
+              courses.
+            </p>
+          </div>
         ) : (
-          enrollments.map((enrollment) => {
-            const course = getCourse(enrollment.courseId);
+          <div
+            className="course-card"
+            style={{ marginTop: "20px" }}
+          >
+            <h2>{currentCourse.title}</h2>
 
-            if (!course) return null;
+            <p>{currentCourse.description}</p>
 
-            return (
+            <p>
+              <strong>Videos Watched:</strong>{" "}
+              {currentEnrollment.videosWatched} /{" "}
+              {currentCourse.totalVideos}
+            </p>
+
+            <p>
+              <strong>Progress:</strong> {progress}%
+            </p>
+
+            <div
+              style={{
+                width: "100%",
+                height: "10px",
+                background: "#e5e7eb",
+                borderRadius: "999px",
+                overflow: "hidden",
+                margin: "12px 0",
+              }}
+            >
               <div
-                key={enrollment.id}
-                className="course-card"
-                style={{ marginBottom: "20px" }}
-              >
-                <h3>{course.title}</h3>
+                style={{
+                  width: `${progress}%`,
+                  height: "100%",
+                  background: "#04AA6D",
+                }}
+              />
+            </div>
 
-                <p>{course.description}</p>
-
-                <p>
-                  <strong>Videos Watched:</strong>{" "}
-                  {enrollment.videosWatched}
-                </p>
-
-                <p>
-                  <strong>Status:</strong>{" "}
-                  {enrollment.completed
-                    ? "Completed ✅"
-                    : "In Progress"}
-                </p>
-
-                <button
-                  className="enroll-btn"
-                  onClick={() => handleContinue(course)}
-                >
-                  Continue Learning ▶
-                </button>
-              </div>
-            );
-          })
+            <button
+              className="enroll-btn"
+              onClick={handleContinue}
+            >
+              Continue Learning ▶
+            </button>
+          </div>
         )}
       </div>
     </DashboardLayout>

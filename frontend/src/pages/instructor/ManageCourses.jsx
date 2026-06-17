@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { toast } from "react-toastify";
+
 import { Pencil, Trash2, Save, X } from "lucide-react";
 import DashboardLayout from "../../components/DashboardLayout";
 import "../../pages/InstructorDashboard.css";
@@ -35,7 +35,7 @@ function ManageCourses() {
       setCourses(response.data);
     } catch (error) {
       console.error(error);
-      toast.error("Failed to fetch courses.");
+      ("Failed to fetch courses.");
     }
   };
 
@@ -79,12 +79,12 @@ function ManageCourses() {
         )
       );
 
-      toast.success("Course updated successfully!");
+      ("Course updated successfully!");
 
       cancelEdit();
     } catch (error) {
       console.error(error);
-      toast.error("Failed to update course.");
+      ("Failed to update course.");
     }
   };
 
@@ -103,10 +103,10 @@ function ManageCourses() {
         prev.filter((course) => course.id !== courseId)
       );
 
-      toast.success("Course deleted successfully!");
+      ("Course deleted successfully!");
     } catch (error) {
       console.error(error);
-      toast.error("Failed to delete course.");
+      ("Failed to delete course.");
     }
   };
 

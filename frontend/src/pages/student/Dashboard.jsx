@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { toast } from "react-toastify";
+
 import "../StudentDashboard.css";
 import DashboardLayout from "../../components/DashboardLayout";
 
@@ -67,7 +67,7 @@ function Dashboard() {
         }
       );
 
-      toast.success("Enrolled successfully! 🎉");
+      ("Enrolled successfully! 🎉");
 
       // Refresh enrollments
       const enrollmentResponse = await axios.get(
@@ -84,9 +84,9 @@ function Dashboard() {
       console.error(error);
 
       if (error.response?.data?.message) {
-        toast.error(error.response.data.message);
+        (error.response.data.message);
       } else {
-        toast.error("Enrollment failed!");
+        ("Enrollment failed!");
       }
     }
   };

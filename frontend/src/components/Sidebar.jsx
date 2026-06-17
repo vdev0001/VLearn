@@ -10,7 +10,6 @@ import {
   Users,
   BarChart3,
   Settings,
-  MessageSquare,
   PlayCircle,
 } from "lucide-react";
 import "./Sidebar.css";
@@ -55,11 +54,6 @@ function Sidebar({ role, collapsed, setCollapsed }) {
               {!collapsed && <span>My Courses</span>}
             </Link>
 
-            <Link to="/student/chat">
-              <MessageSquare size={20} />
-              {!collapsed && <span>Chat</span>}
-            </Link>
-
             <Link to="/student/profile">
               <User size={20} />
               {!collapsed && <span>Profile</span>}
@@ -83,11 +77,6 @@ function Sidebar({ role, collapsed, setCollapsed }) {
             <Link to="/instructor/courses">
               <BookOpen size={20} />
               {!collapsed && <span>Manage Courses</span>}
-            </Link>
-
-            <Link to="/instructor/chat">
-              <MessageSquare size={20} />
-              {!collapsed && <span>Chat</span>}
             </Link>
 
             <Link to="/instructor/profile">

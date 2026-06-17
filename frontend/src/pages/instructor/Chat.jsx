@@ -3,7 +3,7 @@ import { MessageSquare } from "lucide-react";
 
 function Chat() {
   return (
-    <DashboardLayout role="student">
+    <DashboardLayout role="instructor">
       <div className="dashboard">
         <h1 style={{ color: "#04AA6D" }}>
           <MessageSquare size={30} /> AI Learning Assistant
