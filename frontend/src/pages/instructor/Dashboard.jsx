@@ -84,7 +84,7 @@ setTotalStudents(uniqueStudents.size);
           className="course-card"
           style={{ marginTop: "30px" }}
         >
-          <h2>Welcome Instructor 👋</h2>
+          <h2>Welcome Instructor</h2>
 
           <p>
             You have created <strong>{totalCourses}</strong>{" "}

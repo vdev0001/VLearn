@@ -57,7 +57,7 @@ function ManageCourses() {
 
   const saveEdit = async () => {
     try {
-      const response = await axios.patch(
+      const response = await axios.put(
         `http://localhost:3000/course/${editingCourseId}`,
         {
           title,

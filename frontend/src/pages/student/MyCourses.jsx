@@ -190,6 +190,7 @@ function MyCourses() {
             >
               Current Course
             </h2>
+            
 
             {(() => {
               const course = getCourse(

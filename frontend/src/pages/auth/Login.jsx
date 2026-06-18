@@ -65,7 +65,7 @@ return (
   <div className="login-page">
     <div className="login-card">
       <h1>Here VLearn</h1>
-      <p>Welcome back! sign in for VLearn</p>
+      <p>Welcome back! Login in for VLearn</p>
 
       <form onSubmit={handleLogin}>
         <input
