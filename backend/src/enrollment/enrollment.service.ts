@@ -63,14 +63,26 @@ async updateProgress(
 }
 
 async markCompleted(enrollmentId: string) {
+  const enrollment = await this.prisma.enrollment.findUnique({
+    where: { id: enrollmentId },
+  });
+
+  if (!enrollment) {
+    throw new BadRequestException("Enrollment not found");
+  }
+
+  const course = await this.prisma.course.findUnique({
+    where: { id: enrollment.courseId },
+  });
+
   return await this.prisma.enrollment.update({
     where: {
       id: enrollmentId,
     },
     data: {
       completed: true,
+      videosWatched: course?.totalVideos || enrollment.videosWatched,
     },
   });
 }
-
 }
