@@ -70,51 +70,37 @@ function MyCourses() {
     );
   };
 
-  const handleUpdateProgress = async (
-    enrollmentId,
-    currentVideos
-  ) => {
-    try {
-      const enrollment = enrollments.find(
-        (e) => e.id === enrollmentId
-      );
-
-      const course = getCourse(enrollment.courseId);
-
-      const nextVideos = Math.min(
-        currentVideos + 1,
-        course.totalVideos
-      );
-
-      await axios.patch(
-        `http://localhost:3000/enrollment/progress/${enrollmentId}`,
-        {
-          videosWatched: nextVideos,
+ const handleUpdateProgress = async (
+  enrollmentId,
+  videosWatched
+) => {
+  try {
+    await axios.patch(
+      `http://localhost:3000/enrollment/progress/${enrollmentId}`,
+      {
+        videosWatched,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
         },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      }
+    );
 
-      setEnrollments((prev) =>
-        prev.map((item) =>
-          item.id === enrollmentId
-            ? {
-                ...item,
-                videosWatched: nextVideos,
-              }
-            : item
-        )
-      );
-
-      ("Progress Updated 🚀");
-    } catch (err) {
-      console.error(err);
-      ("Failed to update progress");
-    }
-  };
+    setEnrollments((prev) =>
+      prev.map((item) =>
+        item.id === enrollmentId
+          ? {
+              ...item,
+              videosWatched,
+            }
+          : item
+      )
+    );
+  } catch (err) {
+    console.error(err);
+  }
+};
 
   const handleMarkCompleted = async (enrollmentId) => {
     try {
@@ -148,27 +134,7 @@ function MyCourses() {
     }
   };
 
-  const renderProgressBar = (progress) => (
-    <div
-      style={{
-        width: "100%",
-        height: "10px",
-        background: "#e5e7eb",
-        borderRadius: "999px",
-        overflow: "hidden",
-        marginTop: "8px",
-        marginBottom: "15px",
-      }}
-    >
-      <div
-        style={{
-          width: `${progress}%`,
-          height: "100%",
-          background: "#04AA6D",
-        }}
-      />
-    </div>
-  );
+  const renderProgressBar = () => null;
 
   return (
     <DashboardLayout role="student">
@@ -238,17 +204,19 @@ function MyCourses() {
                       marginTop: "15px",
                     }}
                   >
-                    <button
-                      className="enroll-btn"
-                      onClick={() =>
-                        handleUpdateProgress(
-                          activeEnrollment.id,
-                          activeEnrollment.videosWatched
-                        )
-                      }
-                    >
-                      Update Progress
-                    </button>
+                   <input
+  type="range"
+  min="0"
+ max={course.totalVideos}
+  value={activeEnrollment.videosWatched}
+  onChange={(e) =>
+    handleUpdateProgress(
+      activeEnrollment.id,
+      Number(e.target.value)
+    )
+  }
+  style={{ width: "100%", margin: "15px 0" ,accentColor: "#22c55e",}}
+/>
 
                     <button
                       className="enroll-btn"

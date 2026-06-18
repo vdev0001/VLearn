@@ -73,3 +73,20 @@ body {
   background: #059862;
   transform: translateY(-1px);
 }
+
+.register-btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 10px;
+  background: #04AA6D;
+  color: white;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.register-btn:hover {
+  transform: translateY(-2px);
+  background: #059862;
+}

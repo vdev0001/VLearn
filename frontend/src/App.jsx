@@ -157,6 +157,7 @@ function App() {
         />
         */}
 
+<Route path="/register/:role" element={<Register />} />
 
         <Route
           path="/admin/settings"

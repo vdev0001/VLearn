@@ -1,10 +1,13 @@
 import { useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import "./Login.css";
+
 
 function Login() {
   const navigate = useNavigate();
+
+  const location = useLocation();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -36,15 +39,15 @@ function Login() {
       // Role-based navigation
       switch (user.role) {
         case "STUDENT":
-          navigate("/student");
+          navigate("/student", { replace: true });
           break;
 
         case "INSTRUCTOR":
-          navigate("/instructor");
+          navigate("/instructor", { replace: true });
           break;
 
         case "ADMIN":
-          navigate("/admin");
+          navigate("/admin", { replace: true });
           break;
 
         default:
@@ -67,6 +70,25 @@ return (
       <h1>Here VLearn</h1>
       <p>Welcome back! Login in for VLearn</p>
 
+      {location.state?.success && (
+  <div
+    style={{
+      background: "#14532d",
+      color: "#bbf7d0",
+      padding: "12px",
+      borderRadius: "8px",
+      marginBottom: "16px",
+      textAlign: "center",
+      fontSize: "14px",
+      fontWeight: "500",
+    }}
+  >
+    ✅ {location.state.success}
+  </div>
+)}
+
+      
+
       <form onSubmit={handleLogin}>
         <input
           type="email"
@@ -86,6 +108,56 @@ return (
 
         <button type="submit">Login</button>
       </form>
+
+  <p
+  style={{
+    textAlign: "center",
+    color: "#d1d5db", // 👈 Font color
+    marginTop: "20px",
+    marginBottom: "5px",
+    fontSize: "18px",
+    fontWeight: "600",
+  }}
+>
+  New to VLearn?
+</p>
+
+<p
+  style={{
+    textAlign: "center",
+    color: "#9ca3af", // 👈 Light gray
+    marginBottom: "15px",
+    fontSize: "17px",
+  }}
+>
+  Register as
+</p>
+
+
+<div
+  style={{
+    display: "flex",
+    justifyContent: "center",
+    gap: "16px",
+    marginTop: "12px",
+  }}
+>
+  <button
+    type="button"
+    onClick={() => navigate("/register/student")}
+    className="register-btn"
+  >
+    Student
+  </button>
+
+  <button
+    type="button"
+    onClick={() => navigate("/register/instructor")}
+    className="register-btn"
+  >
+    Instructor
+  </button>
+</div>
     </div>
   </div>
 );
