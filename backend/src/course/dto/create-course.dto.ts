@@ -2,6 +2,7 @@ import {
   Contains,
   IsInt,
   IsNotEmpty,
+  IsOptional,
   IsString,
   IsUrl,
   Min,
@@ -34,7 +35,7 @@ export class CreateCourseDto {
   })
   totalVideos!: number;
 
-  @IsString()
-  @IsNotEmpty()
-  instructorId!: string;
+@IsOptional()
+@IsString()
+instructorId?: string;
 }

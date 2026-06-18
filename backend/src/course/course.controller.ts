@@ -6,6 +6,7 @@ import {
   Param,
   Patch,
   Post,
+  Put,
   UseGuards,
 } from '@nestjs/common';
 import { CourseService } from './course.service';
@@ -43,7 +44,7 @@ export class CourseController {
   }
 
   @UseGuards(JwtAuthGuard)
-@Patch(':id')
+@Put(':id')
 updateCourse(
   @Param('id') id: string,
   @Body() courseDto: CreateCourseDto,
